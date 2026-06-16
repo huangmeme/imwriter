@@ -1,0 +1,22 @@
+{
+  "name": "pi-narrative-writer",
+  "version": "0.1.0",
+  "description": "Pi 扩展：游戏文案与小说创作助手",
+  "type": "module",
+  "pi": {
+    "extensions": ["./src/extension.ts"]
+  },
+  "scripts": {
+    "dev": "pi --extension ./src/extension.ts --model deepseek/deepseek-v4-flash",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@earendil-works/pi-coding-agent": "^0.79.4",
+    "@sinclair/typebox": "^0.34.49",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  }
+}
