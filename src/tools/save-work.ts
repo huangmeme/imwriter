@@ -1,17 +1,18 @@
 import { Type } from '@sinclair/typebox';
 import type { ExtensionAPI } from '@earendil-works/pi-coding-agent';
 import { writeWork } from '../store/vault.js';
+import { SAVE_ONCE_GUIDELINE } from './guidelines.js';
 
 export function registerSaveWorkTool(pi: ExtensionAPI) {
   pi.registerTool({
     name: 'save_work',
     label: '保存作品',
-    description: '将已写好的小说正文、剧本或世界观设定存入 vault。你在对话中写完后再调用此工具存盘。',
-    promptSnippet: 'save_work: save prose, script, or reference document to vault',
+    description: '将小说、剧本或世界观设定存入项目根下的 作品/ 或 参考/。对话中写完后调用一次。',
+    promptSnippet: 'save_work: save prose, script, or reference document under project root',
     promptGuidelines: [
-      '你在对话中完成创作后，调 save_work 存盘。',
-      '小说/剧本用 category=work；世界观等设定文档用 category=reference，title 如「世界观」。',
-      '覆盖已有文件前，先向用户确认。',
+      SAVE_ONCE_GUIDELINE,
+      '小说/剧本 → category=work，存 作品/；世界观等 → category=reference，存 参考/。',
+      '覆盖已有文件前先确认。',
     ],
     parameters: Type.Object({
       title: Type.String({ description: '标题，用于文件名' }),
@@ -34,7 +35,7 @@ export function registerSaveWorkTool(pi: ExtensionAPI) {
       });
       return {
         content: [{ type: 'text' as const, text: `已保存到 ${path}` }],
-        details: { path, category: params.category ?? 'work' },
+        details: {},
       };
     },
   });

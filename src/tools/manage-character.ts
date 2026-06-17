@@ -1,6 +1,7 @@
 import { Type } from '@sinclair/typebox';
 import type { ExtensionAPI } from '@earendil-works/pi-coding-agent';
 import { listCharacters, readCharacter, writeCharacter } from '../store/vault.js';
+import { SAVE_ONCE_GUIDELINE } from './guidelines.js';
 
 function formatCharacter(name: string): string {
   const ch = readCharacter(name);
@@ -19,11 +20,11 @@ export function registerManageCharacterTool(pi: ExtensionAPI) {
   pi.registerTool({
     name: 'manage_character',
     label: '角色档案',
-    description: '创建、更新、读取或列出角色卡。角色卡存入 vault/角色/。写 NPC 对白前建议先创建或读取角色卡。',
-    promptSnippet: 'manage_character: CRUD character profile cards in vault',
+    description: '创建、更新、读取或列出角色卡，存于项目根 角色/。',
+    promptSnippet: 'manage_character: CRUD character profile cards under 角色/',
     promptGuidelines: [
-      '写 NPC 对白前，先用 manage_character action=list 查看已有角色，无档案时用 create 创建。',
-      'create/update 只需传入要修改的字段。',
+      '写 NPC 对白前，manage_character action=list；无档案则 create。',
+      SAVE_ONCE_GUIDELINE,
     ],
     parameters: Type.Object({
       action: Type.Union([

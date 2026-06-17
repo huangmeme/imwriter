@@ -1,9 +1,9 @@
 import { resolve } from 'node:path';
 
-/** vault 根目录，默认 Pi 启动时工作目录下的 vault/ */
-export const vaultDir = resolve(process.env.VAULT_DIR ?? resolve(process.cwd(), 'vault'));
+/** 创作文件根目录，默认 Pi 启动时的工作目录（项目根） */
+export const workspaceDir = resolve(process.env.WORKSPACE_DIR ?? process.cwd());
 
-export const vaultSubdirs = {
+export const contentSubdirs = {
   reference: '参考',
   works: '作品',
   characters: '角色',
@@ -14,10 +14,10 @@ export const vaultSubdirs = {
   taste: '品味',
 } as const;
 
-export type VaultSubdir = keyof typeof vaultSubdirs;
+export type ContentSubdir = keyof typeof contentSubdirs;
 
-/** context 注入时参考文件单文件最大字符数 */
+/** load_context 时参考文件单文件最大字符数 */
 export const contextMaxCharsPerFile = 4000;
 
-/** context 注入时参考文件总最大字符数 */
+/** load_context 时参考文件总最大字符数 */
 export const contextMaxTotalChars = 12000;

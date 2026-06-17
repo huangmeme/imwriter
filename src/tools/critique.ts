@@ -26,7 +26,7 @@ export function registerCritiqueTool(pi: ExtensionAPI) {
     ],
     parameters: Type.Object({
       text: Type.Optional(Type.String({ description: '直接传入待评文本；与 work_title 二选一' })),
-      work_title: Type.Optional(Type.String({ description: '从 vault/作品/{title}.md 读取' })),
+      work_title: Type.Optional(Type.String({ description: '从 作品/{title}.md 读取' })),
     }),
     async execute(_toolCallId, params) {
       let draft = params.text?.trim() ?? '';

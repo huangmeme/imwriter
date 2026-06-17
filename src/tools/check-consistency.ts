@@ -17,11 +17,10 @@ export function registerCheckConsistencyTool(pi: ExtensionAPI) {
   pi.registerTool({
     name: 'check_consistency',
     label: '检查设定矛盾',
-    description: '加载 vault 中全部参考设定与角色卡，供你分析是否存在矛盾。用户说「检查矛盾」「有没有 bug」时调用，然后你在对话中给出分析结果。',
+    description: '加载项目根下全部参考设定与角色卡，供你在对话中分析矛盾。',
     promptSnippet: 'check_consistency: load all settings for consistency analysis',
     promptGuidelines: [
-      '用户要求检查矛盾时，先调 check_consistency 获取全部设定，再在对话中分析。',
-      '不要跳过分析直接说没问题。',
+      '用户要求检查矛盾时，调 check_consistency 一次，再在对话中分析。',
     ],
     parameters: Type.Object({}),
     async execute() {

@@ -7,11 +7,11 @@ import {
 } from 'node:fs';
 import { join } from 'node:path';
 import {
+  contentSubdirs,
   contextMaxCharsPerFile,
   contextMaxTotalChars,
-  vaultDir,
-  vaultSubdirs,
-  type VaultSubdir,
+  workspaceDir,
+  type ContentSubdir,
 } from '../config.js';
 import type {
   CharacterFrontmatter,
@@ -27,13 +27,13 @@ export function sanitizeFilename(name: string): string {
   return name.replace(/[\\/:*?"<>|]/g, '_').trim() || '未命名';
 }
 
-/** 子目录绝对路径 */
-export function subdirPath(key: VaultSubdir): string {
-  return join(vaultDir, vaultSubdirs[key]);
+/** 子目录绝对路径（位于项目根下，如 参考/、作品/） */
+export function subdirPath(key: ContentSubdir): string {
+  return join(workspaceDir, contentSubdirs[key]);
 }
 
-/** 写入前按需创建 vault 子目录 */
-export function ensureDir(key: VaultSubdir): string {
+/** 写入前按需创建子目录 */
+export function ensureDir(key: ContentSubdir): string {
   const dir = subdirPath(key);
   mkdirSync(dir, { recursive: true });
   return dir;
@@ -132,21 +132,6 @@ export function readReference(maxTotal = contextMaxTotalChars): string {
     total += chunk.length;
   }
   return parts.join('\n\n---\n\n');
-}
-
-/** 构建 context 注入摘要 */
-export function buildContextSummary(): string {
-  const sections: string[] = [];
-  const taste = readTaste().trim();
-  if (taste) {
-    const preview = taste.slice(0, contextMaxCharsPerFile);
-    sections.push(`## 品味规则\n${preview}${taste.length > contextMaxCharsPerFile ? '\n...(已截断)' : ''}`);
-  }
-  const reference = readReference();
-  if (reference) {
-    sections.push(`## 世界观与参考设定\n${reference}`);
-  }
-  return sections.join('\n\n');
 }
 
 /** 写入作品或参考文档 */
@@ -318,7 +303,7 @@ export function buildWritingBrief(characterName?: string): string {
     }
   }
   if (parts.length === 0) {
-    return '（vault 中暂无设定与品味，可直接创作；完成后用 save_* 工具存盘）';
+    return '（项目目录中暂无设定与品味，可直接创作；完成后用 save_* 工具存盘一次即可）';
   }
   return parts.join('\n\n---\n\n');
 }
@@ -341,5 +326,5 @@ export function readAllSettings(): string {
   const taste = readTaste().trim();
   if (taste) parts.push(`## 品味规则\n${taste}`);
 
-  return parts.length > 0 ? parts.join('\n\n---\n\n') : '（vault 中暂无设定文件）';
+  return parts.length > 0 ? parts.join('\n\n---\n\n') : '（项目目录中暂无设定文件）';
 }

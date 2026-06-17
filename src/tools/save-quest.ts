@@ -1,6 +1,7 @@
 import { Type } from '@sinclair/typebox';
 import type { ExtensionAPI } from '@earendil-works/pi-coding-agent';
 import { writeQuest } from '../store/vault.js';
+import { SAVE_ONCE_GUIDELINE } from './guidelines.js';
 
 const QUEST_FORMAT = `
 任务文案结构参考：
@@ -14,10 +15,10 @@ export function registerSaveQuestTool(pi: ExtensionAPI) {
   pi.registerTool({
     name: 'save_quest',
     label: '保存任务文案',
-    description: '将已写好的任务/关卡/道具描述存入 vault/任务/。你在对话中写完后再调用。',
-    promptSnippet: 'save_quest: save quest or item copy to vault',
+    description: '将任务/道具文案存入项目根 任务/。对话中写完后调用一次。',
+    promptSnippet: 'save_quest: save quest or item copy under 任务/',
     promptGuidelines: [
-      '写任务文案：load_context → 在对话中创作 → save_quest。',
+      SAVE_ONCE_GUIDELINE,
       QUEST_FORMAT,
     ],
     parameters: Type.Object({
@@ -40,7 +41,7 @@ export function registerSaveQuestTool(pi: ExtensionAPI) {
       });
       return {
         content: [{ type: 'text' as const, text: `任务文案已保存到 ${path}` }],
-        details: { path, quest_type: params.quest_type ?? 'side' },
+        details: {},
       };
     },
   });

@@ -2,7 +2,6 @@
  * Pi 叙事创作扩展入口
  */
 import type { ExtensionAPI } from '@earendil-works/pi-coding-agent';
-import { registerContextInjection } from './context.js';
 import { registerLoadContextTool } from './tools/load-context.js';
 import { registerSaveWorkTool } from './tools/save-work.js';
 import { registerRememberTasteTool } from './tools/remember-taste.js';
@@ -16,8 +15,6 @@ import { registerSaveOutlineTool } from './tools/save-outline.js';
 import { registerSaveLocalizationTool } from './tools/save-localization.js';
 
 export default function (pi: ExtensionAPI) {
-  registerContextInjection(pi);
-
   registerLoadContextTool(pi);
   registerSaveWorkTool(pi);
   registerRememberTasteTool(pi);

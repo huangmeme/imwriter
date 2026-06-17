@@ -1,6 +1,7 @@
 import { Type } from '@sinclair/typebox';
 import type { ExtensionAPI } from '@earendil-works/pi-coding-agent';
 import { writeOutline } from '../store/vault.js';
+import { SAVE_ONCE_GUIDELINE } from './guidelines.js';
 
 const OUTLINE_FORMAT = `
 大纲结构参考：
@@ -15,10 +16,10 @@ export function registerSaveOutlineTool(pi: ExtensionAPI) {
   pi.registerTool({
     name: 'save_outline',
     label: '保存故事大纲',
-    description: '将已写好的章节大纲/剧情节拍存入 vault/大纲/。你在对话中写完后再调用。',
-    promptSnippet: 'save_outline: save story outline or beat sheet to vault',
+    description: '将故事大纲存入项目根 大纲/。对话中写完后调用一次。',
+    promptSnippet: 'save_outline: save story outline under 大纲/',
     promptGuidelines: [
-      '写大纲：load_context → 在对话中创作 → save_outline。',
+      SAVE_ONCE_GUIDELINE,
       OUTLINE_FORMAT,
     ],
     parameters: Type.Object({
@@ -40,7 +41,7 @@ export function registerSaveOutlineTool(pi: ExtensionAPI) {
       });
       return {
         content: [{ type: 'text' as const, text: `大纲已保存到 ${path}` }],
-        details: { path, structure: params.structure ?? 'game_chapter' },
+        details: {},
       };
     },
   });

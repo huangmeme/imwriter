@@ -1,6 +1,7 @@
 import { Type } from '@sinclair/typebox';
 import type { ExtensionAPI } from '@earendil-works/pi-coding-agent';
 import { writeLocalization } from '../store/vault.js';
+import { SAVE_ONCE_GUIDELINE } from './guidelines.js';
 
 const LOCALIZE_FORMAT = `
 本地化输出格式：
@@ -14,10 +15,10 @@ export function registerSaveLocalizationTool(pi: ExtensionAPI) {
   pi.registerTool({
     name: 'save_localization',
     label: '保存本地化稿',
-    description: '将已写好的多语言对照稿存入 vault/作品/{标题}-i18n.md。你在对话中完成翻译/本地化后调用。',
-    promptSnippet: 'save_localization: save multilingual variant to vault',
+    description: '将多语言稿存入项目根 作品/{标题}-i18n.md。对话中写完后调用一次。',
+    promptSnippet: 'save_localization: save multilingual variant under 作品/',
     promptGuidelines: [
-      '本地化流程：提供原文与 glossary → 在对话中创作多语言稿 → save_localization。',
+      SAVE_ONCE_GUIDELINE,
       LOCALIZE_FORMAT,
     ],
     parameters: Type.Object({
@@ -33,7 +34,7 @@ export function registerSaveLocalizationTool(pi: ExtensionAPI) {
       });
       return {
         content: [{ type: 'text' as const, text: `本地化稿已保存到 ${path}` }],
-        details: { path, langs: params.target_langs },
+        details: {},
       };
     },
   });

@@ -1,6 +1,7 @@
 import { Type } from '@sinclair/typebox';
 import type { ExtensionAPI } from '@earendil-works/pi-coding-agent';
 import { writeDialogue } from '../store/vault.js';
+import { SAVE_ONCE_GUIDELINE } from './guidelines.js';
 
 const DIALOGUE_FORMAT = `
 对白输出格式参考：
@@ -13,10 +14,11 @@ export function registerSaveDialogueTool(pi: ExtensionAPI) {
   pi.registerTool({
     name: 'save_dialogue',
     label: '保存对白',
-    description: '将已写好的游戏对白存入 vault/对白/。你在对话中写完对白后调用。',
-    promptSnippet: 'save_dialogue: save NPC dialogue to vault after you write it',
+    description: '将游戏对白存入项目根 对白/。对话中写完后调用一次。',
+    promptSnippet: 'save_dialogue: save NPC dialogue under 对白/',
     promptGuidelines: [
-      '写 NPC 对白流程：load_context(character=...) → 在对话中创作 → save_dialogue。',
+      SAVE_ONCE_GUIDELINE,
+      '流程：load_context(character=...) → 对话中创作 → save_dialogue 一次。',
       DIALOGUE_FORMAT,
     ],
     parameters: Type.Object({
@@ -40,7 +42,7 @@ export function registerSaveDialogueTool(pi: ExtensionAPI) {
       });
       return {
         content: [{ type: 'text' as const, text: `对白已保存到 ${path}` }],
-        details: { path, mode: params.mode ?? 'linear' },
+        details: {},
       };
     },
   });
