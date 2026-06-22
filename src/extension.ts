@@ -1,30 +1,24 @@
 /**
- * Pi 叙事创作扩展入口
+ * Pi 叙事创作扩展入口（prompt-only：系统提示驱动工作流）
  */
 import type { ExtensionAPI } from '@earendil-works/pi-coding-agent';
-import { registerLoadContextTool } from './tools/load-context.js';
-import { registerSaveWorkTool } from './tools/save-work.js';
-import { registerRememberTasteTool } from './tools/remember-taste.js';
-import { registerCheckConsistencyTool } from './tools/check-consistency.js';
-import { registerCritiqueTool } from './tools/critique.js';
-import { registerReadFileTool } from './tools/read-file.js';
-import { registerManageCharacterTool } from './tools/manage-character.js';
-import { registerSaveDialogueTool } from './tools/save-dialogue.js';
-import { registerSaveQuestTool } from './tools/save-quest.js';
-import { registerSaveOutlineTool } from './tools/save-outline.js';
-import { registerSaveLocalizationTool } from './tools/save-localization.js';
+import { getWorkspaceDir, setSessionCwd } from './config.js';
+import { getImwriterPrompt, shouldInjectPrompt } from './prompt.js';
 
 export default function (pi: ExtensionAPI) {
-  registerLoadContextTool(pi);
-  registerSaveWorkTool(pi);
-  registerRememberTasteTool(pi);
-  registerCheckConsistencyTool(pi);
-  registerCritiqueTool(pi);
-  registerReadFileTool(pi);
+  pi.on('session_start', async (_event, ctx) => {
+    setSessionCwd(ctx.cwd);
+    process.stderr.write(
+      `[imwriter] 创作根目录：${getWorkspaceDir()}（直接存 参考/、作品/ 等，无 vault/）\n`,
+    );
+  });
 
-  registerManageCharacterTool(pi);
-  registerSaveDialogueTool(pi);
-  registerSaveQuestTool(pi);
-  registerSaveOutlineTool(pi);
-  registerSaveLocalizationTool(pi);
+  pi.on('before_agent_start', async (event) => {
+    const imwriterPrompt = getImwriterPrompt();
+    if (!shouldInjectPrompt(event.systemPrompt, imwriterPrompt)) return;
+
+    return {
+      systemPrompt: `${event.systemPrompt}\n\n${imwriterPrompt}`,
+    };
+  });
 }
