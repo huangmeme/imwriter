@@ -1,5 +1,5 @@
 {
-  "name": "pi-narrative-writer",
+  "name": "imwriter",
   "version": "0.2.0",
   "description": "Pi 扩展：游戏文案与小说创作助手（prompt-only）",
   "type": "module",

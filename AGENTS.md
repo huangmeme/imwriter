@@ -13,7 +13,7 @@
 
 ## Learned Workspace Facts
 
-- 本仓库是 `pi-narrative-writer`：Pi 扩展包，辅助游戏文案与小说创作（prompt-only）。
+- 本仓库是 `imwriter`：Pi 扩展包，辅助游戏文案与小说创作（prompt-only）。
 - 入口为 `src/extension.ts`：`session_start` 设置创作根目录；`before_agent_start` 注入 `.imwriter/prompt.md`。
 - 主提示词在 `.imwriter/prompt.md`；按需 skill 在 `skills/`（如 `criticmarkup-reviewer`，来自 obsidian-track-changes）。
 - 路径由 `getWorkspaceDir()` 控制（无 `vault/` 层），可用 `WORKSPACE_DIR` 环境变量覆盖。

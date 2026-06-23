@@ -1,4 +1,4 @@
-# pi-narrative-writer
+# imwriter
 
 Pi 扩展：游戏文案与小说创作助手。复用 Pi 主 Agent 写作能力，通过 `.imwriter/prompt.md` 注入写作人格与工作流。
 
