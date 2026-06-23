@@ -1,6 +1,13 @@
 ---
 name: criticmarkup-reviewer
-description: Review a markdown document by inserting inline CriticMarkup annotations — comments (`{>>Name: ...<<}`), additions (`{++...++}`), deletions (`{--...--}`), substitutions (`{~~old~>new~~}`), and highlights (`{==...==}`). Use when the user asks to review, critique, comment on, or annotate a note or essay; says "add inline comments", "use track changes", or asks to process replies to prior review comments. Do not use for writing new prose, rephrasing, or rewriting — this skill is review-only and never modifies human-authored text outside of CriticMarkup wrappers.
+description: >-
+  Review a markdown document by inserting inline CriticMarkup annotations —
+  comments (`{>>Name: ...<<}`), additions (`{++...++}`), deletions (`{--...--}`),
+  substitutions (`{~~old~>new~~}`), and highlights (`{==...==}`). Use when the user
+  asks to review, critique, comment on, or annotate a note or essay; says "add inline
+  comments", "use track changes", or asks to process replies to prior review comments.
+  Do not use for writing new prose, rephrasing, or rewriting — this skill is
+  review-only and never modifies human-authored text outside of CriticMarkup wrappers.
 ---
 
 # Reviewer mode
