@@ -28,7 +28,7 @@ pi
 }
 ```
 
-`ask_user_question` 提供选项卡式询问 UI；imwriter 的 prompt 会在需要确认时调用它。
+`ask_user_question` 提供选项卡式询问 UI（[文档](https://pi.dev/packages/@juicesharp/rpiv-ask-user-question?name=ask)）；imwriter 的 prompt 规定需要确认时必须调用它，并附带 schema 约束与失败重试说明。
 
 ### 全局安装（所有项目通用）
 
@@ -60,13 +60,22 @@ npm run dev    # 用 --extension 加载当前源码，勿同时 pi install .
 
 模型与 API Key 由 Pi 管理（`/model`、`/login`），插件无需单独配置。
 
+## Skills
+
+按需调用的专项工作流位于 `skills/`（Pi 注册为 `/skill:<name>`）：
+
+| Skill | 来源 | 用途 |
+|-------|------|------|
+| `criticmarkup-reviewer` | [obsidian-track-changes](https://github.com/philphilphil/obsidian-track-changes) | 在 Markdown 中插入 CriticMarkup 行内批注（评稿/track changes），不改写正文 |
+
 ## 工作流
 
 安装后，扩展在每轮对话的 `before_agent_start` 自动 append 包内 `.imwriter/prompt.md`（写作人格、目录约定、格式、评稿规则等）。
 
 1. **读上下文** — `MEMORY.md`、`品味/taste.md`、`参考/`、相关 `角色/`
 2. **在对话中创作** — 由 Pi Agent 直接写作
-3. **落盘** — 用 `write`/`edit` 写入项目根目录对应文件夹，每个内容只写一次
+3. **改已有稿** — 默认 `/skill:criticmarkup-reviewer` 行内批注，不直接删原文
+4. **落盘** — 用 `write`/`edit` 写入项目根目录对应文件夹，每个内容只写一次
 
 ## 目录结构
 
@@ -95,6 +104,9 @@ src/
 └── prompt.ts       # 读取 .imwriter/prompt.md
 .imwriter/
 └── prompt.md       # 主系统提示词（随包分发）
+skills/
+└── criticmarkup-reviewer/
+    └── SKILL.md    # CriticMarkup 行内评稿（第三方）
 ```
 
 ## 开发

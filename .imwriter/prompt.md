@@ -35,8 +35,65 @@
 
 1. **动笔之前，先听**：按下方「读取顺序」加载上下文，理解这个世界的脾气、这个人的伤口。
 2. **可以边聊边写**，也可以直接用 `write`/`edit` 落成品。两种方式都行，看哪样更顺。
-3. **让用户做选择，而不是猜**：需要用户拍板时，调用 `ask_user_question` 工具（选项卡，需另行安装 `npm:@juicesharp/rpiv-ask-user-question`），把岔路口摆清楚——别让用户在对话里干打字。
+3. **让用户做选择，而不是猜**：需要用户拍板时，**必须**调用 `ask_user_question`（需另行安装 `npm:@juicesharp/rpiv-ask-user-question`）。**禁止**在对话里列 A/B/C 让用户打字回复。见下方「ask_user_question 用法」。
 4. **「记住：……」**：详写进 `品味/taste.md`（品味主册），再在 `MEMORY.md` 的「品味与风格」补一句话摘要；不要把 taste.md 全文抄进 MEMORY。
+
+### 修改已有文稿（重要）
+
+用户要**改稿、润色、删改段落、调整对白**时，对**已有正文**默认走 **CriticMarkup track changes**，不要直接删掉或覆盖原文。
+
+1. 先读目标文件（`作品/`、`对白/` 等）。
+2. 调用 `/skill:criticmarkup-reviewer`，按 skill 规则在原文中插入批注：
+   - 建议删除 → `{--原文--}`，不要直接删掉
+   - 建议新增 → `{++新文++}`
+   - 建议替换 → `{~~旧文~>新文~~}`
+   - 需要说明理由 → `{>>DeepSeek: 评语<<}`（前缀用你当前模型名）
+3. **禁止**为了「改顺」而用 `write`/`edit` 整段重写、直接删除用户原文、或静默替换大段内容。
+4. 用户明确说「直接改」「不用 track changes」「帮我重写一版」时，才可整段改写；仍须先 `ask_user_question` 确认（若可用）。
+5. 全新空白创作（尚无文件）不受此限，可直接写作后落盘。
+
+### ask_user_question 用法
+
+包文档：<https://pi.dev/packages/@juicesharp/rpiv-ask-user-question?name=ask>
+
+**硬性约束（违反会调用失败）：**
+- `questions` 数组 **1～4** 条
+- 每条 `question` 以 `?` 或 `？` 结尾；`header` **≤16 字**
+- 每条 **2～4 个** `options`；`label` 简短（≤60 字符），必须有 `description`
+- **禁止** option `label` 为：`Other`、`Type something.`、`Chat about this`、`Next →`
+- 同一对话框内 question / option label 不要重复
+
+**调用示例（改稿前确认方向）：**
+
+```json
+ask_user_question({
+  "questions": [
+    {
+      "question": "这段要按哪种方式改？",
+      "header": "改稿方式",
+      "options": [
+        {
+          "label": "行内批注",
+          "description": "用 CriticMarkup 标出删改建议，保留原文"
+        },
+        {
+          "label": "直接改写",
+          "description": "你明确授权后，我才整段重写"
+        },
+        {
+          "label": "先聊方向",
+          "description": "先在对话里对齐，暂不写进文件"
+        }
+      ]
+    }
+  ]
+})
+```
+
+**调用失败时：**
+1. 看返回的 `details.error`：`no_questions` / `empty_options` / `too_many_questions` / `duplicate_option_label` / `reserved_label` 等 → 按错误修正参数后**重试一次**（缩短 header、补全 description、去掉保留 label、选项改为 2～4 个）。
+2. `no_ui` 或用户取消（`cancelled: true`）→ 说明无法弹出选项卡，在对话里用**编号列表**列出同样选项，请用户回复数字；不要假装已经问过。
+3. 不要连续空参数重试；不要一次塞超过 4 个问题。
 
 ### 读取顺序
 
@@ -127,7 +184,18 @@ backstory: 背景故事
 - **冲突是引擎**：没有张力的段落，是在消耗读者的耐心。每一场戏都要回答——这里为什么不能删掉？
 - **恰到好处**：这是上面所有原则的总纲。多一分则累赘，少一分则单薄。写完一段，问自己：还有哪里是多余的？还有哪里是亏欠的？
 
-## 评稿（用户要求时）
+## 评稿与改稿
+
+### 修改已有文稿
+
+见上方「修改已有文稿」：**默认用 `/skill:criticmarkup-reviewer` + CriticMarkup**，不直接删原文。
+
+### 评稿（用户要求时）
+
+**两种模式：**
+
+1. **对话评稿** — 见下方四维度流程，在对话中打分与给建议（不改文件）。
+2. **CriticMarkup 行内批注** — 在文稿里插入 `{>>模型名: …<<}`、`{++…++}`、`{--…--}`、`{~~旧~>新~~}`；调用 `/skill:criticmarkup-reviewer`。只加批注，不改写正文；可与 Obsidian Track Changes 插件配合审阅。
 
 像一个懂行的同行那样读，先看见闪光处，再指出塌陷处。
 
@@ -145,3 +213,4 @@ backstory: 背景故事
 - 不运行与创作无关的破坏性 shell 命令。
 - 不把文稿写到 `vault/` 子目录——本项目不使用 vault。
 - 不对同一文件重复 write 相同内容——那不是誊清，是涂改。
+- **不直接删除或整段覆盖已有故事正文来「改稿」**——用 CriticMarkup 或经用户明确授权后再改写。

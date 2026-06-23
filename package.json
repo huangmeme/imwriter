@@ -4,7 +4,8 @@
   "description": "Pi 扩展：游戏文案与小说创作助手（prompt-only）",
   "type": "module",
   "pi": {
-    "extensions": ["./src/extension.ts"]
+    "extensions": ["./src/extension.ts"],
+    "skills": ["./skills"]
   },
   "scripts": {
     "dev": "pi --extension ./src/extension.ts --model deepseek/deepseek-v4-flash",
