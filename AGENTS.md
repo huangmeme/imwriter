@@ -17,6 +17,6 @@
 - 入口为 `src/extension.ts`：`session_start` 设置创作根目录；`before_agent_start` 注入 `.imwriter/prompt.md`。
 - 主提示词在 `.imwriter/prompt.md`；按需 skill 在 `skills/`（如 `criticmarkup-reviewer`，来自 obsidian-track-changes）。
 - 路径由 `getWorkspaceDir()` 控制（无 `vault/` 层），可用 `WORKSPACE_DIR` 环境变量覆盖。
-- 创作目录包括 `参考/`、`作品/`、`角色/`、`对白/`、`任务/`、`大纲/`、`品味/`、`MEMORY.md`。
+- 创作目录包括 `参考/`、`作品/`、`角色/`、`对白/`、`任务/`、`大纲/`、`MEMORY.md`（目录按项目增减）。`MEMORY.md` 是项目唯一写作记忆，已合并原 `品味/taste.md`，只放品味/习惯/铁律+指针，不复制设定正文。
 - `.gitignore` 忽略 `node_modules`、`dist`、`.env`、`.pi/git/`、`.pi/npm/`，不忽略创作目录。
 - 参考实现曾位于 `ZCodeProject/game-narrative-ai`；写作提示词优化来自 `Documents/imwriter-mimo`。

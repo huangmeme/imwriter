@@ -72,7 +72,7 @@ npm run dev    # 用 --extension 加载当前源码，勿同时 pi install .
 
 安装后，扩展在每轮对话的 `before_agent_start` 自动 append 包内 `.imwriter/prompt.md`（写作人格、目录约定、格式、评稿规则等）。
 
-1. **读上下文** — `MEMORY.md`、`品味/taste.md`、`参考/`、相关 `角色/`
+1. **读上下文** — `MEMORY.md`（项目写作记忆）、`参考/`、相关 `角色/`
 2. **在对话中创作** — 由 Pi Agent 直接写作
 3. **改已有稿** — 默认 `/skill:criticmarkup-reviewer` 行内批注，不直接删原文
 4. **落盘** — 用 `write`/`edit` 写入项目根目录对应文件夹，每个内容只写一次
@@ -89,8 +89,7 @@ Story/                 ← 项目根（在此运行 pi）
 ├── 对白/              # NPC 对白
 ├── 任务/              # 任务/道具文案
 ├── 大纲/              # 故事大纲
-├── 品味/taste.md      # 写作偏好（主册）
-└── MEMORY.md          # 跨会话摘要
+└── MEMORY.md          # 项目写作记忆（品味/习惯/铁律指针/进度，持续追加）
 ```
 
 创作内容纳入 Git 跟踪。可通过 `WORKSPACE_DIR` 环境变量指定其他根目录。
