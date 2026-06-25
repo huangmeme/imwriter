@@ -30,4 +30,7 @@ desktop.ini
 .pi/git/
 .pi/npm/
 
+# Cursor hooks 本地状态（ continual-learning 等，机器/会话级，不入库）
+.cursor/hooks/state/
+
 # 创作目录（参考/、作品/ 等）不忽略 — 纳入版本管理
